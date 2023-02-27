@@ -19,9 +19,9 @@ User Function L04E12()
 
     DEFINE MsDialog oDlg TITLE cTitle FROM 000, 000 TO 200, 300 PIXEL 
     @ 014, 010 SAY cText1 size 55, 07 of oDlg PIXEL
-    @ 010, 040 MsGet dDatIn size 55, 11 of oDlg pixel  
+    @ 010, 040 MsGet dDatIn size 55, 11 of oDlg pixel picture "@E 99/99/9999" 
     @ 034, 010 SAY cText2 size 55, 07 of oDlg PIXEL
-    @ 030, 040 MsGet dDatFi size 55, 11 of oDlg pixel  
+    @ 030, 040 MsGet dDatFi size 55, 11 of oDlg pixel picture "@E 99/99/9999"
     DEFINE SBUTTON FROM 010, 120 TYPE 1 ACTION (nOpcao := 1, oDlg:END()) ENABLE OF oDlg
     DEFINE SBUTTON FROM 025, 120 TYPE 2 ACTION (nOpcao := 2, oDlg:END()) ENABLE OF oDlg
     ACTIVATE MSDIALOG oDlg CENTERED  
