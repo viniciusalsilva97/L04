@@ -27,10 +27,10 @@ User Function L04E15()
     PREPARE ENVIRONMENT EMPRESA '99' FILIAL '01' TABLES 'SC7' MODULO 'COM'
 
     DEFINE MsDialog oDlg TITLE cTitle FROM 000, 000 TO 200, 300 PIXEL 
-    @ 014, 010 SAY cText1 size 55, 07 of oDlg PIXEL
-    @ 010, 030 MsGet cCar size 55, 11 of oDlg pixel  
-    DEFINE SBUTTON FROM 010, 120 TYPE 1 ACTION (nOpcao := 1, oDlg:END()) ENABLE OF oDlg
-    DEFINE SBUTTON FROM 025, 120 TYPE 2 ACTION (nOpcao := 2, oDlg:END()) ENABLE OF oDlg
+        @ 014, 010 SAY cText1 size 55, 07 of oDlg PIXEL
+        @ 010, 030 MsGet cCar size 55, 11 of oDlg pixel  
+        DEFINE SBUTTON FROM 010, 120 TYPE 1 ACTION (nOpcao := 1, oDlg:END()) ENABLE OF oDlg
+        DEFINE SBUTTON FROM 025, 120 TYPE 2 ACTION (nOpcao := 2, oDlg:END()) ENABLE OF oDlg
     ACTIVATE MSDIALOG oDlg CENTERED  
 
     cQuery := "SELECT B1_COD, B1_DESC, B1_PRV1 FROM " + retSqlName("SB1") + " SB1 WHERE B1_COD ='" + Upper(cCar) + "' AND D_E_L_E_T_ = ' '"
@@ -56,10 +56,10 @@ User Function L04E15()
         FwAlertInfo(cMsg, "Atenção!")
 
         DEFINE MsDialog oMsg TITLE cTitl2 FROM 000, 000 TO 200, 300 PIXEL 
-        @ 014, 010 SAY cText2 size 55, 07 of oDlg PIXEL
-        @ 010, 030 MsGet cEsco size 55, 11 of oDlg pixel  
-        DEFINE SBUTTON FROM 010, 120 TYPE 1 ACTION (nOpc := 1, oMsg:END()) ENABLE OF oMsg
-        DEFINE SBUTTON FROM 025, 120 TYPE 2 ACTION (nOpc := 2, oMsg:END()) ENABLE OF oMsg
+            @ 014, 010 SAY cText2 size 55, 07 of oDlg PIXEL
+            @ 010, 030 MsGet cEsco size 55, 11 of oDlg pixel  
+            DEFINE SBUTTON FROM 010, 120 TYPE 1 ACTION (nOpc := 1, oMsg:END()) ENABLE OF oMsg
+            DEFINE SBUTTON FROM 025, 120 TYPE 2 ACTION (nOpc := 2, oMsg:END()) ENABLE OF oMsg
         ACTIVATE MSDIALOG oMsg CENTERED  
 
         if nOpc == 1 .and. Upper(cEsco) == "S"

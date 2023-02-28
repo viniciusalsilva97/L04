@@ -47,7 +47,7 @@ User Function L04E16()
     end
 
     if cMsg == ""
-        cMsg := "Esse c?digo n?o foi cadastrado!"
+        cMsg := "Esse código não foi cadastrado!"
     endif  
     
     if nOpcao == 1 .and. nCont > 0
