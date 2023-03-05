@@ -3,51 +3,45 @@
 #INCLUDE 'tbiconn.ch'
 
 User Function L04E11()
+    local oDlg              := nil
+    local oGetCodigoProduto := nil  
+    local oBtnPesquisar     := nil  
+    local cCodigo := space(20)
+    local cTitulo := "Pesquise pelo código de um produto"
+
+    oDlg := tDialog():New(180,180,550,700,cTitulo,,,,,CLR_BLACK,CLR_WHITE,,,.T.)
+
+        oGetCodigoProduto := TGet():New(50,90,{| u | If( PCount() == 0, cCodigo, cCodigo := u )},oDlg,40,1,"@!",,0,,,.F.,,.T.,,.F.,,.F.,.F.,,.F.,.F.,,cCodigo,,,,.t.)
+
+        oBtnPesquisar:= tButton():New(70, 90, "Pesquisar",oDlg,{||buscaSql(cCodigo)}, 40,10,,,.F.,.T.,.F.,,.F.,,,.F.)
+
+    oDlg:Activate(,,,.t.,,,)
+Return 
+
+Static Function buscaSql(cCodigo)
     local aArea  := getArea()
-    local oDlg   := nil 
-    local cAlias := GetNextAlias()
-    local cTitle := "Vamos pesquisar o código"
-    local cText1 := "Código: "
-    local cCar   := Space(20)
-    local cMsg   := ""
-    local cCod   := ""
-    local cDes   := ""
-    local cPrv   := ""
+    local cAlias := getNextAlias()
     local cQuery := ""
+    local cCod   := ""
+    local cDesc  := ""
+    local cPreco := ""
 
-    PREPARE ENVIRONMENT EMPRESA '99' FILIAL '01' TABLES 'SC7' MODULO 'COM'
+    prepare environment empresa '99' filial '01' tables 'SB1' modulo 'com'
 
-    DEFINE MsDialog oDlg TITLE cTitle FROM 000, 000 TO 200, 300 PIXEL 
-    @ 014, 010 SAY cText1 size 55, 07 of oDlg PIXEL
-    @ 010, 030 MsGet cCar size 55, 11 of oDlg pixel  
-    DEFINE SBUTTON FROM 010, 120 TYPE 1 ACTION (nOpcao := 1, oDlg:END()) ENABLE OF oDlg
-    DEFINE SBUTTON FROM 025, 120 TYPE 2 ACTION (nOpcao := 2, oDlg:END()) ENABLE OF oDlg
-    ACTIVATE MSDIALOG oDlg CENTERED  
+    cQuery += "SELECT B1_COD, B1_DESC, B1_PRV1  FROM " + retSqlName("SB1") + " SB1 WHERE B1_COD = '" + cCodigo + "' AND D_E_L_E_T_ = ' '"
 
-    cQuery := "SELECT B1_COD, B1_DESC, B1_PRV1 FROM " + retSqlName("SB1") + " SB1 WHERE B1_COD ='" + Upper(cCar) + "' AND D_E_L_E_T_ = ' '"
+    tcquery cQuery alias &(cAlias) new 
 
-    TCQUERY cQuery ALIAS &(cAlias) NEW
+    cCod   := &(cAlias) -> (B1_COD)
+    cDesc  := &(cAlias) -> (B1_DESC)
+    cPreco := &(cAlias) -> (B1_PRV1)
 
-    while &(cAlias) -> (!EOF())
-        cCod := &(cAlias) -> (B1_COD)
-        cDes := &(cAlias) -> (B1_DESC)
-        cPrv := &(cAlias) -> (B1_PRV1)
+    if empty(cCod)
+        fwAlertError("O código digitado não está cadastrado no sistema", "Atenção")
+    else 
+        fwAlertSuccess("Código: " + cValToChar(cCod) + CRLF + "Descrição: " + cValToChar(cDesc) + CRLF + "Preço de Venda: " + cValToChar(cPreco))
+    endif 
 
-        cMsg += "Código: " + cValToChar(cCod) + CRLF + "Descrição: " + cValToChar(cDes) + CRLF + "Preço de Venda: " + cValToChar(cPrv) + CRLF + "--------------------------------------------" + CRLF
-
-        &(cAlias) -> (DbSkip())
-    end
-
-    if cMsg == ""
-        cMsg := "Esse código não foi cadastrado!"
-    endif  
-    
-    if nOpcao == 1
-        FwAlertInfo(cMsg, 'Confere Código')
-    else
-        FwAlertError("Você cancelou o programa", "Cancelado")
-    endif
-
-    &(cAlias) -> (DbCloseArea())
-    restArea(aArea)
+    &(cAlias) -> (dbCloseArea())
+    restArea(aArea) 
 Return 
